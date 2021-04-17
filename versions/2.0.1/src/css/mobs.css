@@ -1,0 +1,38 @@
+.pl {
+    z-index: 20;
+    position: absolute;
+    top: 60px;
+    left: 60px;
+}
+.pl__skin, .pl {
+    width: 32px;
+    height: 48px;
+}
+.pl__skin { position: relative }
+.pl__skin > * { position: absolute }
+.pl__head {
+    top: 0;
+    left: 8px;
+    z-index: 3;
+}
+.pl__body, .pl__lhand, .pl__rhand {
+    top: 12px;
+}
+.pl__body {
+    left: 4px;
+}
+.pl__lhand {
+    left: 0;
+}
+.pl__rhand {
+    right: 0;
+}
+.pl__lfoot, .pl__rfoot {
+    top: 36px;
+}
+.pl__lfoot {
+    left: 4px;
+}
+.pl__rfoot {
+    right: 4px;
+}

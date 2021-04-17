@@ -1,0 +1,22 @@
+*{
+    margin: 0;
+    padding: 0px;
+}
+html{
+    height: 100%;
+}
+.launcher__box{
+    background-image: url('intro.png');
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+.launcher__h1{
+    text-align: center;
+}
+.launcher__p{
+    text-align: center;
+}
+.launcher__p:hover{
+    color: red;
+}
