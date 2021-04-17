@@ -4,6 +4,7 @@ export default function rendering (gameRl) {
     wrap.classList.add('wrap')
     wrap.style.gridTemplateRows = `repeat(${coordLength}, 64px)`
     wrap.style.gridTemplateColumns = `repeat(${coordLength}, 64px)`
+    
     let coordinates = gameRl.worldmap.coordinates
     for (let i = 0; i < coordinates.length; i++) {
         coordinates[i].forEach((value)=>{
@@ -13,4 +14,7 @@ export default function rendering (gameRl) {
             wrap.appendChild(tile)
         })
     }
+    //centering wrap
+    wrap.style.top = `calc(50% - ${wrap.clientHeight})`
+    wrap.style.left = `calc(50% - ${wrap.clientWidth})`
 }

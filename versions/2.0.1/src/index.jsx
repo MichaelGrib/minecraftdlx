@@ -19,7 +19,8 @@
   calculate(gameRl);
   generate(gameRl);
   blocks(gameRl);
-  player(gameRl)
+  player(gameRl);
+  
 
 
 
@@ -116,10 +117,6 @@
     gamescreen.appendChild(gameRl.PL)
   }  
   console.log(gameRl)
-gamescreen.addEventListener('mousemove', (e) => {
-  gameRl.PL.style.top = `${e.clientY}px`
-  gameRl.PL.style.left = `${e.clientX}px`
-})
   
   
   
