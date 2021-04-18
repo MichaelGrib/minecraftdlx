@@ -4,9 +4,10 @@
   import './css/mobs.css'
   import './css/test.sass'
 
-  const gameRl = {
+  window.gameRl = {
     worldmap: '',
     blocks: '',
+    gameplay: {},
   }
 
   import React from 'react';
@@ -111,11 +112,19 @@
         </div>
       )
     }
-    ReactDOM.render(<Viewport/>, gamescreen) 
+    let GameRender = new Promise(() => {
+      ReactDOM.render(<Viewport/>, gamescreen)
+    })
+    GameRender.then(() => {
+      console.log('then')
+      document.getElementById('wrap').style.transform  = `translate(-${2 / wrap.getComputed}, -${2 / wrap.clienHeight})`
+    })
     
     render(gameRl);//it isn't ReactDOM.render, it's my own module
     gamescreen.appendChild(gameRl.PL)
+    
   }  
+  
   console.log(gameRl)
   
   
