@@ -37,7 +37,7 @@
   const Firstmenu = () => {
     return (
     <div>
-      <h1 className="menu__h1">Версия 2.0.1</h1>
+      <h1 className="menu__h1">Версия 2.0.2</h1>
       <button id="local" className="menu__local">Локальная игра</button>
       <button disabled>Настройки</button>
       <a href="../../../index.html">Выйти</a>
