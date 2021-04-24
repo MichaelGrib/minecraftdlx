@@ -1,29 +1,28 @@
-export default function calculate (gameRl) {
-    let worldmap = {}
-    worldmap.coordinates = []
-    worldmap.radius = 20
-    worldmap.minusradius = -1 * worldmap.radius
-    worldmap.coordLength = worldmap.radius * 2 + 1 //'1' add zero coordinate 
-    worldmap.blocksCount = Math.pow((worldmap.coordLength), 2) 
-    worldmap.blockCoordsX = worldmap.minusradius
-    worldmap.blockCoordsY = worldmap.minusradius 
+export default function calculate (world) {
+    world.coordinates = []
+    world.radius = 20
+    world.minusradius = -1 * world.radius
+    world.coordLength = world.radius * 2 + 1 //'1' add zero coordinate 
+    world.blocksCount = Math.pow((world.coordLength), 2) 
+    world.blockCoordsX = world.minusradius
+    world.blockCoordsY = world.minusradius 
     let coordRow = []
-    for(let i = 1; i <= worldmap.blocksCount; i++) {
+    for(let i = 1; i <= world.blocksCount; i++) {
         let coord = {
-            name: `${worldmap.blockCoordsX + ',' + worldmap.blockCoordsY}`
+            name: `${world.blockCoordsX + ',' + world.blockCoordsY}`
         }
         coordRow.push(coord)
-        if(worldmap.blockCoordsX >= worldmap.radius){
-            worldmap.blockCoordsY++
-            worldmap.blockCoordsX = worldmap.minusradius
-            worldmap.coordinates.push(coordRow)
+        if(world.blockCoordsX >= world.radius){
+            world.blockCoordsY++
+            world.blockCoordsX = world.minusradius
+            world.coordinates.push(coordRow)
             coordRow = []
         }
         else{
-            worldmap.blockCoordsX++
+            world.blockCoordsX++
         }
     } 
-     gameRl.worldmap = worldmap
+    return world
 }
 
 

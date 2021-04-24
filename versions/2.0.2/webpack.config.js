@@ -6,7 +6,7 @@ const host = 'localhost';
 const port = '7070';
 
 module.exports = {
-    mode: 'production',
+    mode: 'development',
     entry: [
         'webpack-dev-server/client?http://' + host + ':' + port +'/',
         './src/index.jsx',

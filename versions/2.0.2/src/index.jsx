@@ -4,105 +4,35 @@
   import './css/mobs.css'
   import './css/test.sass'
 
+
+  //gameRl is Main object that contains gaming core. Object gameRl will be used in game process for render textures, manage logic, physic, AI, etc. 
   window.gameRl = {
     worldmap: '',
     blocks: '',
     gameplay: {},
   }
+  //But, one separate world will track in LocalStorage. All changes will commited in LocalStorage throughout the gameplay 
+
 
   import React from 'react';
   import ReactDOM from 'react-dom';
+  import LocalWorldsMenu from './LocalWorldsMenu.jsx';
   import calculate from './calculate.js';
   import generate from './generate.js';
   import blocks from './blocks';
-  import render from './rendering'
+  import rendering from './rendering';
   import player from './player'
-  calculate(gameRl);
-  generate(gameRl);
   blocks(gameRl);
   player(gameRl);
   
-
-
-
-
   let menu = document.getElementById('menu')
-  
-  let saves = [
-    {name: 'Мирок'},
-    {name: 'Пустыня'},
-    {name: 'Деревня'},
-  ]
 
-  const Firstmenu = () => {
-    return (
-    <div>
-      <h1 className="menu__h1">Версия 2.0.2</h1>
-      <button id="local" className="menu__local">Локальная игра</button>
-      <button disabled>Настройки</button>
-      <a href="../../../index.html">Выйти</a>
-    </div>
-    )
-  }
-  ReactDOM.render(<Firstmenu />, menu)
-  function inLocal() {
-    let Localmenu = () => {
-      return (
-        <div>
-          <button id='localGameStart'>Начать игру</button>
-          <div id='localsaves' className='localsaves'>
-          </div>
-        </div>
-      )}
-      ReactDOM.render(<Localmenu/>, menu)
-      
-      Localmenu.className = 'localmenu'
-      function getSaves() {
-        for (let i = 0; i < saves.length; i++) {
-          
-          let save = document.createElement('div')
-          save.id = saves[i].name
-          let enter = document.createElement('div')
-          enter.textContent = saves[i].name
-          save.appendChild(enter)
+  //this function is enter point in game. Function gets world from localstorage and render it 
+
+  function localGame (event) {
     
-          let remove = document.createElement('button')
-          remove.classList.add('remove')
-          remove.textContent = 'Удалить'
-          save.appendChild(remove)
-          document.getElementById('localsaves').appendChild(save)
-        }
-      }
-      getSaves()
-      let localsaves = document.getElementById('localsaves')
-      let remove = document.querySelectorAll('.remove')
-      remove.forEach((element)=>{
-        element.addEventListener('click', (e) => {
-          let removeTarget = e.target
-          let saveId = removeTarget.parentElement.id
-          alert('Вы действительно хотите удалить мир ' + saveId + "?")
-          for(let b = 0; b < saves.length; b++){
-            
-            if(saves[b].name === saveId){
-              console.log(b)
-              saves.splice(b, 1)
-              localsaves.removeChild(localsaves.children[b])
-            }
-          }
+    console.log(event)
 
-        })
-
-      }) 
-      const localGameStart = document.getElementById('localGameStart')
-      localGameStart.addEventListener('click', localGame)
-  }
-  function inMain () {
-    ReactDOM.render(firstmenu, menu)
-  }
-  const local = document.getElementById('local')
-  local.addEventListener('click', inLocal)
-
-  function localGame () {
     menu.style.display = 'none'
     const gamescreen = document.getElementById('gamescreen')
     const Viewport = () => {
@@ -116,18 +46,53 @@
       ReactDOM.render(<Viewport/>, gamescreen)
     })
     GameRender.then(() => {
-      console.log('then')
       document.getElementById('wrap').style.transform  = `translate(-${2 / wrap.getComputed}, -${2 / wrap.clienHeight})`
     })
+    let thisworld = event.target.id
     
-    render(gameRl);//it isn't ReactDOM.render, it's my own module
+    let localsaves = localStorage.getItem('saves')
+    localsaves = JSON.parse(localsaves)
+    thisworld = localsaves[thisworld]
+      
+    window.methods.rendering(gameRl, thisworld);//it isn't ReactDOM.render, it's my own module
     gamescreen.appendChild(gameRl.PL)
     
   }  
+
   
-  console.log(gameRl)
+  //This methods had been used in different modules. They should be available in global scope
+  window.methods = {
+    calculate,
+    generate,
+    localGame,
+    rendering,
+  }
+  
+
   
   
+  //starter menu with basic settings. This menu allows enter in Local game, settings, exit game , maybe in future Network game
+  const Firstmenu = () => {
+    return (
+      <div>
+        <h1 className="menu__h1">Версия 2.0.2</h1>
+        <button id="local" className="menu__local" onClick={toLocalWorldsMenu}>Локальная игра</button>
+        <button disabled>Настройки</button>
+        <a href="../../../index.html">Выйти</a>
+      </div>
+    )
+  }
+  let firstmenu = () => {
+    ReactDOM.render(<Firstmenu />, menu) 
+  }
+  firstmenu()
+
+
   
   
+  function toLocalWorldsMenu () {
+    ReactDOM.render(<LocalWorldsMenu />, menu)
+  }
   
+  
+

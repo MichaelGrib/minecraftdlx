@@ -466,23 +466,7 @@ html,
 .pl__rfoot {
     right: 4px;
 }
-.pl__foot_motion {
-    animation-name: moving;
-    animation-iteration-count: infinite;
-    animation-duration: 1000ms;
+.concat {
+  color: #333;
+  background-color: #231;
 }
-@keyframes moving {
-    0%{
-        transform: translateY(0px);
-    }
-    33%{
-        transform: translateY(-4px);
-    }
-    66%{
-        transform: translateY(0px);
-    }
-    100%{
-        transform: translateY(-4px);
-    }
-}
-.concat{color:#333;background-color:#231}

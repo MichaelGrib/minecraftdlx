@@ -1,7 +1,7 @@
-export default function rendering (gameRl) {
-
-    let coordinates = gameRl.worldmap.coordinates
-    let coordLength = gameRl.worldmap.coordLength
+export default function rendering (gameRl, world) {
+    
+    let coordinates = world.coordinates
+    let coordLength = world.coordLength
     const wrap = document.getElementById('wrap')
     const gamescreen = document.getElementById('gamescreen')
     wrap.classList.add('wrap')
@@ -20,8 +20,8 @@ export default function rendering (gameRl) {
     let tilelength = 64
 
     window.addEventListener('resize', () => {        
-        wrap.style.top = `${(gameRl.worldmap.minusradius * tilelength) +  (gamescreen.getBoundingClientRect().height / 2)}px`
-        wrap.style.left = `${(gameRl.worldmap.minusradius * tilelength) + (gamescreen.getBoundingClientRect().width / 2)}px`
+        wrap.style.top = `${(world.minusradius * tilelength) +  (gamescreen.getBoundingClientRect().height / 2)}px`
+        wrap.style.left = `${(world.minusradius * tilelength) + (gamescreen.getBoundingClientRect().width / 2)}px`
     })
 
     function controls () {

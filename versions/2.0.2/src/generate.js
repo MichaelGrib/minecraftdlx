@@ -1,7 +1,8 @@
-export default function generate (gameRl) {
+
+export default function generate (world) {
     let selectRow = []
     let compareRow = []
-    gameRl.worldmap.coordinates.forEach( (y) => {
+    world.coordinates.forEach( (y) => {
 
         y.forEach((x) => {
             let blockForGeneration = ['grass', 'stone']
@@ -25,5 +26,5 @@ export default function generate (gameRl) {
         compareRow = selectRow
         selectRow = []
     })
-
+    return world
 }
