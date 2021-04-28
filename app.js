@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
       })
       let shellA = document.createElement('a')
       shellA.href = `./versions/${version}/dist/index.html`
-      shellA.classList.add('launcher__p')
+      shellA.classList.add('launcher__btn')
       shellA.textContent = "Войти в игру"
 
       shell.appendChild(shellA)
