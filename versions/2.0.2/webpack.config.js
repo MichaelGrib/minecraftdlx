@@ -6,11 +6,10 @@ const host = 'localhost';
 const port = '7070';
 
 module.exports = {
-    mode: 'development',
-    entry: [
-        'webpack-dev-server/client?http://' + host + ':' + port +'/',
-        './src/index.jsx',
-    ],
+    mode: 'production',
+    entry: {
+        menu: './src/index.jsx',
+    },
     output: {
         filename: '[name].js',
         path: path.resolve(__dirname, 'dist'),

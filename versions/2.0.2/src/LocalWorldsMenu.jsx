@@ -5,9 +5,12 @@ export default class LocalWorldsMenu extends React.Component {
   constructor (props) {
       super(props)
       this.state = {
-        mode: 'main'
+        mode: 'firstMenu',
+        reload: true,
       }
     }
+
+
 
     render () {
       function LocalStorageSaves () {
@@ -15,13 +18,15 @@ export default class LocalWorldsMenu extends React.Component {
         lastsaves = JSON.parse(lastsaves)
         if(lastsaves){
           return (
-            <div>
-  
+            <div className='localsaves__container'>
+              <p className='localsaves__p'>Сохранения</p>
               {lastsaves.map((save, index) => {
+                let thisSave = save
                 return (
-                  <div key={index}>
-                    <p>{save.name}</p>
-                    <button id={index} onClick={window.methods.localGame.bind({save})}>Играть</button>
+                  <div className="localsaves__box" key={index} id={index}>
+                    <p className="localsaves__name">{save.name}</p>
+                    <button className="localsaves__play"  onClick={(event) => this.playLocalGame({event})}>Играть</button>
+                    <button className="localsaves__delete" onClick={(event) => {this.deleteLocalSave(event)}}>Удалить</button>
                   </div>
                 )
               })}
@@ -31,40 +36,61 @@ export default class LocalWorldsMenu extends React.Component {
 
         }
         else {
-          return <div></div>
+          return (
+            <div className='localsaves__container'>
+              <p className='localsaves__p'>Сохранения</p>
+            </div>
+          )
         }
         
       }
+      if (this.state.mode === "firstMenu") {
+        return (
+          <div className='entrymenu__container'>
+            <h1 className='entrymenu__h1'>Версия 2.0.2</h1>
+            <button id='local' className='entrymenu__btn' onClick={this.mainLocal.bind(this)}>Локальная игра</button>
+            <button className='entrymenu__btn entrymenu__btn_disabled' disabled>Настройки</button>
+            <a className='entrymenu__btn' href='../../../index.html'>Выйти</a>
+          </div>
+        )
+      }
+
       if(this.state.mode === 'main') {
         return (
-          <div>
-            <button onClick={this.newLocal.bind(this)}>Создать мир</button>
-            <button onClick={this.toFirstMenu.bind(this)}>Вернуться на главную</button>
+          <div className='localmenu__container'>
+            <button className='localmenu__btn' onClick={this.newLocal.bind(this)}>Создать мир</button>
+            <button className='localmenu__btn' onClick={this.toFirstMenu.bind(this)}>Вернуться на главную</button>
             {LocalStorageSaves.call(this)}
           </div>
         )
       } 
-
-      if (this.state.mode === 'newlocal') {
+      if (this.state.mode === 'newLocal') {
         return (
-          <form name="newLocal">
-            <input name="newLocalName" placeholder='Новый мир'></input>
-            <button onClick={this.createLocal.bind(this)}>Создать</button>
-            <button type="submit" onClick={this.mainLocal.bind(this)}>Отменить</button>
+          <form className='newlocal__container' name='newLocal'>
+            <input className='newlocal__input' name='newLocalName' placeholder='Новый мир'></input>
+            <button className='newlocal__btn' onClick={this.createLocal.bind(this)}>Создать</button>
+            <button className='newlocal__btn' type='submit' onClick={this.mainLocal.bind(this)}>Отменить</button>
           </form>
         )
       }
-
       if (this.state.mode === 'editLocal') {
         return (
-          <form name="editLocal">
-            <input name="editLocalName"></input>
-            <button type="submit" >Сохранить</button>
-            <button onClick={this.mainLocal.bind(this)}>Отменить</button>
+          <form className='editlocal__container' name='editLocal'>
+            <input className='editlocal__input' name='editLocalName'></input>
+            <button className='editlocal__btn' type='submit'>Сохранить</button>
+            <button className='editlocal__btn' onClick={this.mainLocal.bind(this)}>Отменить</button>
           </form>
         )
       }
-      
+
+      if (this.state.mode === 'inGame' ) {
+        
+        return (
+          <div id='gamemenu' className='ingamemenu__shell'>
+            <button id='exitGame' className='ingamemenu__exit' onClick={this.exitGame.bind(this)}>Выйти</button>
+          </div>
+        )
+      }
     }
     
     //In method createLocal, form data of world goes through calculate() and generate() functions. So, then we get object 'world' with all necessary data for launch world and push it in saves on localstorage.    
@@ -72,7 +98,7 @@ export default class LocalWorldsMenu extends React.Component {
       class WorldCreate {
           constructor (name) {
               this.name = name
-          }
+          } 
       }
       let world = new WorldCreate(document.forms.newLocal.elements.newLocalName.value) 
         
@@ -87,30 +113,48 @@ export default class LocalWorldsMenu extends React.Component {
       }
 
       
-      // localStorage.removeItem('saves');
-      saves.push(world) ;
-      saves = JSON.stringify(saves);
-      localStorage.setItem('saves', saves);
+      saves.push(world)
+      this.sendInLocalSaves(saves)
     }
     //Method editLocalSave makes possible edit and delete some data of saves.
+    exitGame() {
+      window.methods.stopGame()
+      this.setState({mode: 'main'})
+    }
     editLocalSave() {
 
     }
-
-    editLocal () {
+    deleteLocalSave(event) {
+      let save = event.target.parentNode.id 
+      let saves = this.getFromLocalSaves()
+      saves.splice(save, 1)
+      this.sendInLocalSaves(saves)
+      this.setState({reload: !this.state.reload})
       
-      this.setState({mode: 'editlocal'});
     }
-
+    editLocal () {
+      this.setState({mode: 'editLocal'});
+    }
     newLocal () {
-      this.setState({mode: 'newlocal'});
+      this.setState({mode: 'newLocal'});
     }
-
     mainLocal () {
       this.setState({mode: 'main'});
     }
-
     toFirstMenu () {
+      this.setState({mode: 'firstMenu'});
     }
-    
+    getFromLocalSaves () {
+      let saves = localStorage.getItem('saves')
+          saves = JSON.parse(saves)
+          return saves
+    }
+    sendInLocalSaves(s) {
+      let saves = JSON.stringify(s)
+      localStorage.setItem('saves', saves)
+    }
+    playLocalGame(event) {
+      this.setState({mode: 'inGame'})
+      window.methods.localGame(event.event)
+    }
 }

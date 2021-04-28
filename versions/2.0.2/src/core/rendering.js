@@ -1,9 +1,20 @@
+
+
 export default function rendering (gameRl, world) {
+    
     
     let coordinates = world.coordinates
     let coordLength = world.coordLength
-    const wrap = document.getElementById('wrap')
+
     const gamescreen = document.getElementById('gamescreen')
+    const viewport = document.createElement('div')
+    const wrap = document.createElement('div')
+    viewport.id = 'viewport'
+    wrap.id = 'wrap'
+    gamescreen.appendChild(viewport)
+    viewport.appendChild(wrap)
+    gamescreen.appendChild(gameRl.PL)
+    
     wrap.classList.add('wrap')
     wrap.style.gridTemplateRows = `repeat(${coordLength}, 64px)`
     wrap.style.gridTemplateColumns = `repeat(${coordLength}, 64px)`
@@ -19,17 +30,36 @@ export default function rendering (gameRl, world) {
 
     let tilelength = 64
 
-    window.addEventListener('resize', () => {        
+    
+
+    function resizeViewport() {        
         wrap.style.top = `${(world.minusradius * tilelength) +  (gamescreen.getBoundingClientRect().height / 2)}px`
         wrap.style.left = `${(world.minusradius * tilelength) + (gamescreen.getBoundingClientRect().width / 2)}px`
-    })
+    }
+
+    
+//===================================
+//Controls
+//===================================
+
+    window.pause = false
+    function pauseGame () {
+        window.pause = !window.pause
+        let menu = document.getElementById('gamemenu')
+        menu.classList.toggle('ingamemenu__shell_active')
+        for (let control in window.gameRl.gameplay.controls) {
+            window.gameRl.gameplay.controls[control] = false
+            console.log(window.gameRl.gameplay.controls)
+        }
+        
+    }
 
     function controls () {
         let moveTimeOut,
         lastEvent,
         x = 0,
         y = 0,
-        speed = 100;
+        speed = 20;
         window.gameRl.gameplay.controls = {
             KeyW: false,
             KeyA: false,
@@ -38,6 +68,7 @@ export default function rendering (gameRl, world) {
         }
 
         function motion () {
+            if(window.pause) {return}
             let ctr = window.gameRl.gameplay.controls;
             if (ctr.KeyA || ctr.KeyD || ctr.KeyW || ctr.KeyS) { //animation
                 window.gameRl.PL.skin.lfoot.classList.add('pl__foot_motion')
@@ -51,21 +82,21 @@ export default function rendering (gameRl, world) {
                     
             }
             else if (ctr.KeyA) {
-                x += 7
+                x += 2
             }
             else if (ctr.KeyD) {
-                x -= 7
+                x -= 2
             }
             
             if (ctr.KeyW && ctr.KeyS) {
                 
             }
             else if (ctr.KeyW) {
-                y += 7
+                y += 2
                 window.gameRl.PL.skin.head.src = './images/bhead.jpg'
             }
             else if (ctr.KeyS) {
-                y -= 7
+                y -= 2
                 window.gameRl.PL.skin.head.src = './images/fhead.jpg'
             }
 
@@ -74,19 +105,19 @@ export default function rendering (gameRl, world) {
 
         let motiontime = setInterval( motion, speed)
         motiontime
-
-        
-
-        
     
-    
-        document.addEventListener('keydown', e => {
-            e.preventDefault();
+        
+        
+        function keyDown (e){
             let ctr = window.gameRl.gameplay.controls;
-            if (lastEvent && lastEvent.code == e.code) return;
             lastEvent = e;
-    
+            
             switch (e.code) {
+                
+                case 'Escape':
+                    pauseGame();
+                    break;
+
                 case 'KeyD':
                     ctr.KeyD = true;
                     break;
@@ -99,12 +130,12 @@ export default function rendering (gameRl, world) {
                 case 'KeyS':
                     ctr.KeyS = true;
                     break;
+                
             }
     
-        });
+        };
     
-        document.addEventListener('keyup', e => {
-            e.preventDefault();
+        function keyUp (e) {      
             let ctr = window.gameRl.gameplay.controls;
             lastEvent = null;
     
@@ -123,12 +154,24 @@ export default function rendering (gameRl, world) {
                     break;
             }
     
-        });
-    
+        };       
+
+        if(window.firstLaunch) {
+            window.addEventListener('resize', resizeViewport)
+
+            document.addEventListener('keydown', keyDown)
+
+            document.addEventListener('keyup', keyUp) 
+            
+            window.addEventListener('blur', pauseGame)
+            window.firstLaunch = false
+        }
+        
+
     }
     
     controls ()
-    
-}
+}  
+
 
 
