@@ -17,7 +17,7 @@
   import ReactDOM from 'react-dom';
   import LocalWorldsMenu from './LocalWorldsMenu.jsx';
   import calculate from './core/calculate.js';
-  import generate from './core/generate.js';
+  import generate from './core/generate';
   import blocks from './core/blocks';
   import stopGame from './core/stopgame'
   import rendering from './core/rendering';

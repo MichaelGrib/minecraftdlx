@@ -147,6 +147,10 @@ html,
     width: 100%;
     height: 100%;
 }
+*{
+    margin: 0;
+    padding: 0px;
+}
 html,
 body{
     overflow: hidden;
@@ -165,6 +169,7 @@ body{
 }
 .wrap{
     transform-origin: center;
+    gap: 0px 0px;
     overflow: hidden;
     position: absolute;
     display: grid;

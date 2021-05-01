@@ -20,10 +20,10 @@ export default function rendering (gameRl, world) {
     wrap.style.gridTemplateColumns = `repeat(${coordLength}, 64px)`
     
     for (let i = 0; i < coordinates.length; i++) {
-        coordinates[i].forEach((value)=>{
+        coordinates[i].forEach((block)=>{
             let tile = document.createElement('img')
             tile.classList.add('tile')
-            tile.src = "./resourсepack/" + gameRl.blocks.getTexture(value)
+            tile.src = "./resourсepack/" + gameRl.blockMethods.getTexture(block)
             wrap.appendChild(tile)
         })
     }

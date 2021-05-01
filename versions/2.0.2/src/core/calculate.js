@@ -1,6 +1,6 @@
 export default function calculate (world) {
     world.coordinates = []
-    world.radius = 20
+    world.radius = 40
     world.minusradius = -1 * world.radius
     world.coordLength = world.radius * 2 + 1 //'1' add zero coordinate 
     world.blocksCount = Math.pow((world.coordLength), 2) 
@@ -9,7 +9,8 @@ export default function calculate (world) {
     let coordRow = []
     for(let i = 1; i <= world.blocksCount; i++) {
         let coord = {
-            name: `${world.blockCoordsX + ',' + world.blockCoordsY}`
+            x: world.blockCoordsX,
+            y: world.blockCoordsY,
         }
         coordRow.push(coord)
         if(world.blockCoordsX >= world.radius){

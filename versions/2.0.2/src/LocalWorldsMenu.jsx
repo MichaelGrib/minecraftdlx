@@ -95,6 +95,7 @@ export default class LocalWorldsMenu extends React.Component {
     
     //In method createLocal, form data of world goes through calculate() and generate() functions. So, then we get object 'world' with all necessary data for launch world and push it in saves on localstorage.    
     createLocal (event) {
+      event.target.style.pointerEvents = 'none'
       class WorldCreate {
           constructor (name) {
               this.name = name
