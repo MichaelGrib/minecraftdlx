@@ -49,7 +49,6 @@ export default function rendering (gameRl, world) {
         menu.classList.toggle('ingamemenu__shell_active')
         for (let control in window.gameRl.gameplay.controls) {
             window.gameRl.gameplay.controls[control] = false
-            console.log(window.gameRl.gameplay.controls)
         }
         
     }
@@ -59,7 +58,12 @@ export default function rendering (gameRl, world) {
         lastEvent,
         x = 0,
         y = 0,
-        speed = 20;
+        tps = 15,
+        movementValue = 2,
+        movementMultiplier,
+        walk = 1,
+        run = 2
+        
         window.gameRl.gameplay.controls = {
             KeyW: false,
             KeyA: false,
@@ -78,32 +82,30 @@ export default function rendering (gameRl, world) {
                 window.gameRl.PL.skin.lfoot.classList.remove('pl__foot_motion')
                 window.gameRl.PL.skin.rfoot.classList.remove('pl__foot_motion')    
             }
-            if (ctr.KeyA && ctr.KeyD) {
-                    
-            }
+            if (ctr.shiftKey) {movementMultiplier = run} 
+            else {movementMultiplier = walk}
+            if (ctr.KeyA && ctr.KeyD) {}
             else if (ctr.KeyA) {
-                x += 2
+                x += movementValue * movementMultiplier
             }
             else if (ctr.KeyD) {
-                x -= 2
+                x -= movementValue * movementMultiplier
             }
             
-            if (ctr.KeyW && ctr.KeyS) {
-                
-            }
+            if (ctr.KeyW && ctr.KeyS) {}
             else if (ctr.KeyW) {
-                y += 2
+                y += movementValue * movementMultiplier
                 window.gameRl.PL.skin.head.src = './images/bhead.jpg'
             }
             else if (ctr.KeyS) {
-                y -= 2
+                y -= movementValue * movementMultiplier
                 window.gameRl.PL.skin.head.src = './images/fhead.jpg'
             }
 
             wrap.style.transform = `translate(${x}px, ${y}px)`;
         } 
 
-        let motiontime = setInterval( motion, speed)
+        let motiontime = setInterval( motion, tps)
         motiontime
     
         
@@ -111,6 +113,7 @@ export default function rendering (gameRl, world) {
         function keyDown (e){
             let ctr = window.gameRl.gameplay.controls;
             lastEvent = e;
+            if (e.shiftKey) {ctr.shiftKey = true} 
             
             switch (e.code) {
                 
@@ -135,10 +138,10 @@ export default function rendering (gameRl, world) {
     
         };
     
-        function keyUp (e) {      
+        function keyUp (e) {   
             let ctr = window.gameRl.gameplay.controls;
             lastEvent = null;
-    
+            if (!e.shiftKey) {ctr.shiftKey = false} 
             switch (e.code) {
                 case 'KeyD':
                     ctr.KeyD = false;
